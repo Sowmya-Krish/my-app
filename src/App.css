@@ -1,23 +1,37 @@
-.App {
-    text-align: center;
-   
+.movie-poster {
+  height: 500px;
+  width: 340px;
+  object-fit: Cover;
 }
-.user-profile-pic {
-    height: 200px;
-    width : 200px;
-    border-radius: 50%;
-    object-fit: cover;
+.movie-name {
+  font-size: 24px;
 }
 
-.App .user-name{
-    font-family:Georgia, 'Times New Roman', Times, serif;
-    color: blue;
+.movie-specs {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.movie-container {
+  background-color: orange;
+  width: 340px;
+}
+.movie-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: space-around;
 
+  /*  display : grid;
+ grid-template-columns: repeat(autofit, minmax(340px, 1fr));
+ gap :1rem;
+ justify-items: center; */
 }
 
-.user-iname{
-font-weight : bold;
-font-style: Italic;
-color : yellowgreen;
-
+.add-movie-form {
+  display: flex;
+  flex-direction: column;
+  max-width: 300px;
+  margin: 1rem auto;
+  gap: 1rem;
 }

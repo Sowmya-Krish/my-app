@@ -35,3 +35,14 @@
   margin: 1rem auto;
   gap: 1rem;
 }
+.not-found{
+  text-align: center;
+  font-size : 50px ;
+  margin :0; 
+
+}
+.not-found-pic{
+width : 100%;
+max-width : 580px;
+margin : 0auto;
+}

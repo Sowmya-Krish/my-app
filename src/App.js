@@ -27,6 +27,7 @@ import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 
 function App() {
+  const [movieList, setMovieList] = useState([]);
   const names = ["Sowmi", "Sammu", "Kannan", "saba"];
   const users = [
     {
@@ -42,7 +43,7 @@ function App() {
       pic: "https://www.pinkvilla.com/imageresize/when_thalapathy_vijay_turned_down_the_offer_to_act_in_this_superhit_movie_of_director_shankar.jpg?width=752&t=pvorg",
     },
   ];
-  const [movieList, setMovieList] = useState([]);
+
   const navigate = useNavigate();
   const [mode, setMode] = useState("dark");
   const darkTheme = createTheme({
@@ -50,11 +51,6 @@ function App() {
       mode: mode,
     },
   });
-  useEffect(() => {
-    fetch("https://6396baeda68e43e4180a4830.mockapi.io/movies")
-      .then((data) => data.json())
-      .then((mvs) => setMovieList(mvs));
-  }, []);
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -114,10 +110,19 @@ function App() {
   );
 }
 
-function MovieDetails({ movieList }) {
+function MovieDetails() {
   const { id } = useParams();
-  const movie = movieList[id];
-  console.log(movieList, movie);
+  //const movie = movieList[id];
+  const [movie, setMovie] = useState([]);
+
+  useEffect(() => {
+    fetch(`https://6396baeda68e43e4180a4830.mockapi.io/movies/${id}`, {
+      method: "GET",
+    })
+      .then((data) => data.json())
+      .then((mv) => setMovie(mv));
+  }, []);
+  console.log(movie);
   const styles = {
     color: movie.rating > 7 ? "green" : "red",
   };
@@ -233,19 +238,43 @@ function User({ pic, name }) {
     </section>
   );
 }
-function MovieList({ movieList, setMovieList }) {
+//container and presentation component
+function MovieList() {
+  const [movieList, setMovieList] = useState([]);
+  const getMovies = () => {
+    fetch("https://6396baeda68e43e4180a4830.mockapi.io/movies", {
+      method: "GET",
+    })
+      .then((data) => data.json())
+      .then((mvs) => setMovieList(mvs));
+  };
+
+  useEffect(() => getMovies(), []);
+  const deleteMovie = (id) => {
+    fetch(`https://6396baeda68e43e4180a4830.mockapi.io/movies/${id}`, {
+      method: "DELETE",
+    }).then((data) => getMovies());
+  };
   return (
     <div>
-      <AddMovie movieList={movieList} setMovieList={setMovieList} />
       <div className="movie-list">
-        {movieList.map((mv, index) => (
-          <Movie key={index} movie={mv} id={index} />
+        x
+        {movieList.map((mv) => (
+          <div key={mv.id}>
+            <Movie
+              movie={mv}
+              id={mv.id}
+              deleteButton={
+                <button onClick={() => deleteMovie(mv.id)}>Delete me</button>
+              }
+            />
+          </div>
         ))}
       </div>
     </div>
   );
 }
-function Movie({ movie, id }) {
+function Movie({ movie, id, deleteButton }) {
   const styles = {
     color: movie.rating > 7 ? "green" : "red",
   };
@@ -277,12 +306,15 @@ function Movie({ movie, id }) {
             ⭐{movie.rating}
           </p>
         </div>
+        {/* conditional rendering */}
         {show ? (
           <h3 className="movie-summary">Summary : {movie.summary}</h3>
         ) : null}
       </CardContent>
       <CardActions>
+        {/*  rendering props pattern */}
         <Counter />
+        {deleteButton}
       </CardActions>
     </Card>
   );

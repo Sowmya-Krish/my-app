@@ -25,6 +25,7 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
+import { API } from "./global";
 
 function App() {
   const [movieList, setMovieList] = useState([]);
@@ -116,7 +117,7 @@ function MovieDetails() {
   const [movie, setMovie] = useState([]);
 
   useEffect(() => {
-    fetch(`https://6396baeda68e43e4180a4830.mockapi.io/movies/${id}`, {
+    fetch(`${API}/movies/${id}`, {
       method: "GET",
     })
       .then((data) => data.json())
@@ -242,16 +243,16 @@ function User({ pic, name }) {
 function MovieList() {
   const [movieList, setMovieList] = useState([]);
   const getMovies = () => {
-    fetch("https://6396baeda68e43e4180a4830.mockapi.io/movies", {
+    fetch(`${API}/movies`, {
       method: "GET",
     })
       .then((data) => data.json())
       .then((mvs) => setMovieList(mvs));
   };
-
+  //Render box
   useEffect(() => getMovies(), []);
   const deleteMovie = (id) => {
-    fetch(`https://6396baeda68e43e4180a4830.mockapi.io/movies/${id}`, {
+    fetch(`${API}/movies/${id}`, {
       method: "DELETE",
     }).then((data) => getMovies());
   };
@@ -265,7 +266,13 @@ function MovieList() {
               movie={mv}
               id={mv.id}
               deleteButton={
-                <button onClick={() => deleteMovie(mv.id)}>Delete me</button>
+                <IconButton
+                  onClick={() => deleteMovie(mv.id)}
+                  aria-label="delete"
+                  color="error"
+                >
+                  <DeleteIcon />
+                </IconButton>
               }
             />
           </div>
